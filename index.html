@@ -2,16 +2,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Jeopardy FULL</title>
+<title>Jeopardy</title>
 
 <style>
 body{background:#111;color:white;text-align:center;font-family:Arial;}
-.score{display:flex;justify-content:center;gap:10px;margin:10px;}
-.team{padding:10px;border:2px solid white;}
+.score{margin:10px;}
+.team{display:inline-block;margin:5px;padding:10px;border:2px solid white;}
 .active{background:green;}
 
 table{margin:auto;border-collapse:collapse;}
-td,th{width:110px;height:60px;border:2px solid white;cursor:pointer;}
+td,th{width:100px;height:60px;border:2px solid white;cursor:pointer;}
 th{background:red;}
 td{background:blue;}
 
@@ -19,28 +19,21 @@ td{background:blue;}
 position:fixed;top:30%;left:50%;
 transform:translate(-50%,-50%);
 background:#222;padding:20px;border:2px solid white;
-width:60%;
 }
 
-.option{
-margin:10px;
-padding:10px;
-background:#333;
-cursor:pointer;
-}
-.option:hover{background:#555;}
+.option{margin:10px;padding:10px;background:#333;cursor:pointer;}
 </style>
 </head>
 
 <body>
 
-<h1>🎮 JEOPARDY</h1>
+<h2>JEOPARDY</h2>
 
 <div class="score">
-<div id="t0">TEAM 1: <span id="s0">0</span></div>
-<div id="t1">TEAM 2: <span id="s1">0</span></div>
-<div id="t2">TEAM 3: <span id="s2">0</span></div>
-<div id="t3">TEAM 4: <span id="s3">0</span></div>
+<div id="t0" class="team">TEAM1: <span id="s0">0</span></div>
+<div id="t1" class="team">TEAM2: <span id="s1">0</span></div>
+<div id="t2" class="team">TEAM3: <span id="s2">0</span></div>
+<div id="t3" class="team">TEAM4: <span id="s3">0</span></div>
 </div>
 
 <table id="board"></table>
@@ -49,67 +42,21 @@ cursor:pointer;
 
 let scores=[0,0,0,0];
 let current=0;
-let used=0;
 let doubleTurn=[false,false,false,false];
 
 const pts=[100,200,300,400,500,600,700,800];
-const cats=["Math","History","Geo","English","Sport"];
+const cats=["Math","History","Geo","Eng","Sport"];
 
-/* 40 SAVOL */
+/* SAVOLLAR */
 const q=[
-[
-{q:"2+2?",o:["3","4","5","6"],a:1},
-{q:"5×5?",o:["20","25","30","15"],a:1},
-{q:"10-3?",o:["6","7","8","9"],a:1},
-{q:"12/4?",o:["2","3","4","6"],a:1},
-{q:"9+1?",o:["10","11","12","13"],a:0},
-{q:"6+6?",o:["10","12","14","16"],a:1},
-{q:"8×2?",o:["14","16","18","20"],a:1},
-{q:"20/5?",o:["2","3","4","5"],a:2}
-],
-[
-{q:"Poytaxt?",o:["Toshkent","Buxoro","Xiva","Nukus"],a:0},
-{q:"1991?",o:["Mustaqillik","Urush","Inqilob","Davlat"],a:0},
-{q:"Temur?",o:["Sarkarda","Shoir","Olim","Artist"],a:0},
-{q:"Karimov?",o:["Prezident","Sportchi","Olim","Aktyor"],a:0},
-{q:"1945?",o:["Urush tugadi","Boshlanish","Davlat","Tinchlik"],a:0},
-{q:"Bayroq rangi?",o:["Ko'k","Qizil","Sariq","Qora"],a:0},
-{q:"O'zbekiston?",o:["Davlat","Shahar","Daryo","Tog"],a:0},
-{q:"Temur tug‘ilgan?",o:["Shahrisabz","Xiva","Nukus","Farg'ona"],a:0}
-],
-[
-{q:"Eng katta okean?",o:["Tinch","Atlantika","Hind","Shimoliy"],a:0},
-{q:"Qit'alar soni?",o:["7","5","6","8"],a:0},
-{q:"Nil?",o:["Daryo","Ko'l","Tog","Shahar"],a:0},
-{q:"Yer?",o:["Planeta","Yulduz","Oy","Quyosh"],a:0},
-{q:"Sovuq qit'a?",o:["Antarktida","Afrika","Osiyo","Yevropa"],a:0},
-{q:"Dunyo?",o:["Planeta","Yulduz","Oy","Quyosh"],a:0},
-{q:"Qit'a soni?",o:["7","6","5","4"],a:0},
-{q:"Daryo misol?",o:["Nil","Amu","Sirdaryo","Volga"],a:0}
-],
-[
-{q:"Hello?",o:["Salom","Xayr","Rahmat","Uzr"],a:0},
-{q:"Book?",o:["Kitob","Qalam","Stol","Telefon"],a:0},
-{q:"Apple?",o:["Olma","Banan","Uzum","Anor"],a:0},
-{q:"Go past?",o:["Went","Go","Gone","Going"],a:0},
-{q:"Dog?",o:["It","Mushuk","Ot","Qush"],a:0},
-{q:"Water?",o:["Suv","Olov","Havo","Tuproq"],a:0},
-{q:"Sun?",o:["Quyosh","Oy","Yulduz","Yer"],a:0},
-{q:"Ice?",o:["Muz","Suv","Tosh","Olov"],a:0}
-],
-[
-{q:"Futbol jamoa?",o:["11","10","9","12"],a:0},
-{q:"Messi?",o:["Argentina","Braziliya","Fransiya","Italiya"],a:0},
-{q:"Ronaldo?",o:["Portugal","Ispaniya","Germaniya","Fransiya"],a:0},
-{q:"NBA?",o:["Basketbol","Futbol","Tennis","Hokkey"],a:0},
-{q:"Olimpiada?",o:["4 yil","2 yil","1 yil","5 yil"],a:0},
-{q:"Gepard?",o:["Tez","Sekin","Og'ir","Kichik"],a:0},
-{q:"Sport?",o:["Harakat","Uyqu","Ovqat","Kitob"],a:0},
-{q:"O'yin?",o:["Fun","Work","Sleep","Eat"],a:0}
-]
+[{q:"2+2?",o:["3","4","5","6"],a:1},{q:"5×5?",o:["20","25","30","15"],a:1},{q:"10-3?",o:["6","7","8","9"],a:1},{q:"12/4?",o:["2","3","4","6"],a:1},{q:"9+1?",o:["10","11","12","13"],a:0},{q:"6+6?",o:["10","12","14","16"],a:1},{q:"8×2?",o:["14","16","18","20"],a:1},{q:"20/5?",o:["2","3","4","5"],a:2}],
+[{q:"Poytaxt?",o:["Toshkent","Buxoro","Xiva","Nukus"],a:0},{q:"1991?",o:["Mustaqillik","Urush","Inqilob","Davlat"],a:0},{q:"Temur?",o:["Sarkarda","Shoir","Olim","Artist"],a:0},{q:"Karimov?",o:["Prezident","Sportchi","Olim","Aktyor"],a:0},{q:"1945?",o:["Urush tugadi","Boshlanish","Davlat","Tinchlik"],a:0},{q:"Bayroq?",o:["Ko'k","Qizil","Sariq","Qora"],a:0},{q:"O'zbekiston?",o:["Davlat","Shahar","Daryo","Tog"],a:0},{q:"Temur tug‘ilgan?",o:["Shahrisabz","Xiva","Nukus","Farg'ona"],a:0}],
+[{q:"Okean?",o:["Tinch","Atlantika","Hind","Shimoliy"],a:0},{q:"Qit'a?",o:["7","5","6","8"],a:0},{q:"Nil?",o:["Daryo","Ko'l","Tog","Shahar"],a:0},{q:"Yer?",o:["Planeta","Yulduz","Oy","Quyosh"],a:0},{q:"Sovuq?",o:["Antarktida","Afrika","Osiyo","Yevropa"],a:0},{q:"Dunyo?",o:["Planeta","Yulduz","Oy","Quyosh"],a:0},{q:"Qit'a soni?",o:["7","6","5","4"],a:0},{q:"Daryo?",o:["Nil","Amu","Sirdaryo","Volga"],a:0}],
+[{q:"Hello?",o:["Salom","Xayr","Rahmat","Uzr"],a:0},{q:"Book?",o:["Kitob","Qalam","Stol","Telefon"],a:0},{q:"Apple?",o:["Olma","Banan","Uzum","Anor"],a:0},{q:"Go past?",o:["Went","Go","Gone","Going"],a:0},{q:"Dog?",o:["It","Mushuk","Ot","Qush"],a:0},{q:"Water?",o:["Suv","Olov","Havo","Tuproq"],a:0},{q:"Sun?",o:["Quyosh","Oy","Yulduz","Yer"],a:0},{q:"Ice?",o:["Muz","Suv","Tosh","Olov"],a:0}],
+[{q:"Futbol?",o:["11","10","9","12"],a:0},{q:"Messi?",o:["Argentina","Braziliya","Fransiya","Italiya"],a:0},{q:"Ronaldo?",o:["Portugal","Ispaniya","Germaniya","Fransiya"],a:0},{q:"NBA?",o:["Basketbol","Futbol","Tennis","Hokkey"],a:0},{q:"Olimpiada?",o:["4 yil","2 yil","1 yil","5 yil"],a:0},{q:"Gepard?",o:["Tez","Sekin","Og'ir","Kichik"],a:0},{q:"Sport?",o:["Harakat","Uyqu","Ovqat","Kitob"],a:0},{q:"O'yin?",o:["Fun","Work","Sleep","Eat"],a:0}]
 ];
 
-/* 4 BONUS */
+/* 4 BONUS (aniq 4 ta) */
 let prize=[];
 while(prize.length<4){
 let r=Math.floor(Math.random()*40);
@@ -118,7 +65,6 @@ if(!prize.includes(r)) prize.push(r);
 
 function board(){
 let t=document.getElementById("board");
-
 let h="<tr>";
 cats.forEach(c=>h+="<th>"+c+"</th>");
 h+="</tr>";
@@ -142,24 +88,24 @@ function openQ(c,i,cell,id){
 if(prize.includes(id)){
 
 let type=Math.floor(Math.random()*4);
-let text="";
 
 if(type===0){
-let val=pts[i]*2;
+let val=pts[i];
 scores[current]+=val;
-text="🎁 BONUS +" + val;
+alert("🎁 BONUS +" + val);
 }
 
 if(type===1){
 doubleTurn[current]=true;
-text="⚡ NEXT DOUBLE";
+alert("⚡️ KEYINGI SAVOL 2X");
 }
+
 if(type===2){
 let enemy=(current+1)%4;
 let val=Math.min(scores[enemy],1000);
 scores[enemy]-=val;
 scores[current]+=val;
-text="🦹 STEAL +" + val;
+alert("🦹 STEAL +" + val);
 }
 
 if(type===3){
@@ -167,25 +113,21 @@ let enemy=(current+1)%4;
 let tmp=scores[current];
 scores[current]=scores[enemy];
 scores[enemy]=tmp;
-text="🔁 SWAP";
+alert("🔁 SWAP");
 }
-
-alert(text);
 
 cell.innerText="🎁";
 cell.style.background="gold";
 
-next();
-update();
+next(); update();
 return;
 }
 
 /* SAVOL */
 let qq=q[c][i];
-
 let div=document.createElement("div");
 div.className="modal";
-div.innerHTML="<h2>"+qq.q+"</h2>";
+div.innerHTML="<h3>"+qq.q+"</h3>";
 
 qq.o.forEach((o,x)=>{
 let b=document.createElement("div");
@@ -193,7 +135,6 @@ b.className="option";
 b.innerText=o;
 
 b.onclick=()=>{
-
 let point=pts[i];
 
 if(doubleTurn[current]){
@@ -209,29 +150,17 @@ scores[current]-=point;
 
 cell.style.background="gray";
 cell.onclick=null;
-
 document.body.removeChild(div);
 
-next();
-update();
+next(); update();
 };
-
 div.appendChild(b);
 });
 
 document.body.appendChild(div);
 }
 
-function next(){
-current=(current+1)%4;
-used++;
-
-if(used===40){
-let m=Math.max(...scores);
-let w=scores.indexOf(m)+1;
-alert("🏆 TEAM "+w+" WIN");
-}
-}
+function next(){current=(current+1)%4;}
 
 function update(){
 for(let i=0;i<4;i++){
@@ -244,6 +173,9 @@ document.getElementById("t"+current).classList.add("active");
 board();
 
 </script>
-
 </body>
 </html>
+
+doubleTurn[current]=true;
+alert("⚡ KEYINGI SAVOL 2X");
+}
