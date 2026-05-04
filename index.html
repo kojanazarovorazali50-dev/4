@@ -84,14 +84,71 @@ let current=0;
 let doubleTurn=[false,false,false,false];
 
 const pts=[100,200,300,400,500,600,700,800];
-const cats=["A","B","C","D","E"];
+const cats=["MATH","HISTORY","GEO","ENGLISH","SPORT"];
 
-/* 40 SAVOL */
-const q=Array(5).fill(0).map(()=>Array(8).fill(0).map(()=>({
-q:"Savol?",
-o:["A","B","C","D"],
-a:1
-})));
+const q = [
+
+/* 1 - MATH */
+[
+{q:"2+2?", o:["3","4","5","6"], a:1},
+{q:"5×5?", o:["20","25","30","15"], a:1},
+{q:"10-3?", o:["6","7","8","9"], a:1},
+{q:"12/4?", o:["2","3","4","6"], a:1},
+{q:"9+1?", o:["10","11","12","13"], a:0},
+{q:"6+6?", o:["10","12","14","16"], a:1},
+{q:"8×2?", o:["14","16","18","20"], a:1},
+{q:"20/5?", o:["2","3","4","5"], a:2}
+],
+
+/* 2 - TARIX */
+[
+{q:"O‘zbekiston poytaxti?", o:["Toshkent","Buxoro","Xiva","Nukus"], a:0},
+{q:"1991 yil?", o:["Mustaqillik","Urush","Inqilob","Davlat"], a:0},
+{q:"Amir Temur?", o:["Sarkarda","Shoir","Olim","Aktyor"], a:0},
+{q:"Karimov kim?", o:["Prezident","Sportchi","Olim","Aktyor"], a:0},
+{q:"1945 yil?", o:["Urush tugadi","Boshlanish","Davlat","Tinchlik"], a:0},
+{q:"Bayroq rangi?", o:["Ko‘k","Qizil","Sariq","Qora"], a:0},
+{q:"O‘zbekiston nima?", o:["Davlat","Shahar","Daryo","Tog"], a:0},
+{q:"Temur tug‘ilgan joy?", o:["Shahrisabz","Xiva","Nukus","Farg‘ona"], a:0}
+],
+
+/* 3 - GEOGRAPHY */
+[
+{q:"Eng katta okean?", o:["Tinch","Atlantika","Hind","Arktika"], a:0},
+{q:"Qit’alar soni?", o:["7","5","6","8"], a:0},
+{q:"Nil nima?", o:["Daryo","Tog","Ko‘l","Shahar"], a:0},
+{q:"Yer nima?", o:["Planet","Yulduz","Oy","Quyosh"], a:0},
+{q:"Eng sovuq joy?", o:["Antarktida","Afrika","Osiyo","Yevropa"], a:0},
+{q:"Dunyo nima?", o:["Planet","Yulduz","Oy","Quyosh"], a:0},
+{q:"Qit’a soni?", o:["7","6","5","4"], a:0},
+{q:"Daryo misol?", o:["Nil","Amu","Sirdaryo","Volga"], a:0}
+],
+
+/* 4 - ENGLISH */
+[
+{q:"Hello?", o:["Salom","Xayr","Rahmat","Uzr"], a:0},
+{q:"Book?", o:["Kitob","Qalam","Stol","Telefon"], a:0},
+{q:"Apple?", o:["Olma","Banan","Uzum","Anor"], a:0},
+{q:"Go past?", o:["Went","Go","Gone","Going"], a:0},
+{q:"Dog?", o:["It","Mushuk","Ot","Qush"], a:0},
+{q:"Water?", o:["Suv","Olov","Havo","Tuproq"], a:0},
+{q:"Sun?", o:["Quyosh","Oy","Yulduz","Yer"], a:0},
+{q:"Ice?", o:["Muz","Suv","Tosh","Olov"], a:0}
+],
+
+/* 5 - SPORT */
+[
+{q:"Futbolda nechta o‘yinchi?", o:["11","10","9","12"], a:0},
+{q:"Messi qayerlik?", o:["Argentina","Braziliya","Fransiya","Italiya"], a:0},
+{q:"Ronaldo qayerlik?", o:["Portugal","Ispaniya","Germaniya","Fransiya"], a:0},
+{q:"NBA nima?", o:["Basketbol","Futbol","Tennis","Hokkey"], a:0},
+{q:"Olimpiada necha yilda?", o:["4","2","1","5"], a:0},
+{q:"Gepard nima?", o:["Tez","Sekin","Og‘ir","Kichik"], a:0},
+{q:"Sport nima?", o:["Harakat","Uyqu","Ovqat","Kitob"], a:0},
+{q:"O‘yin nima?", o:["Fun","Work","Sleep","Eat"], a:0}
+]
+
+];
 
 /* 4 BONUS CELLS */
 let bonusCells=[];
